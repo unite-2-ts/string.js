@@ -9,5 +9,11 @@ const _utf8_ = EXAMPLE0;
 const _base64_valid_ = "YSDEgCDwkICAIOaWhyDwn6aE";
 
 //
+console.log(_utf8_);
+console.log(_uint8_);
+
+//
 console.log(UTF8.encode(_utf8_, "base64"));
 console.log(Bytes.encode(_uint8_, "base64"));
+console.log(UTF8.encode(_utf8_, "raw"));
+console.log(Bytes.encode(_uint8_, "raw"));

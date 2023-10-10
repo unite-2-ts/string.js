@@ -82,7 +82,7 @@ export class UTF8 {
         switch (toCoding) {
             case "utf8": return utf8;
             case "base64": return btoa(unescape(encodeURIComponent(utf8)));
-            case "raw": return Bytes.encode(this.#enc.encode(utf8), "raw");
+            case "raw": return unescape(encodeURIComponent(utf8));//Bytes.encode(this.#enc.encode(utf8), "raw");
             case "bytes": return this.#enc.encode(utf8);
         };
         return utf8;
@@ -93,7 +93,7 @@ export class UTF8 {
         switch (fromCoding) {
             case "utf8": return from;
             case "base64": return decodeURIComponent(escape(atob(from)));
-            case "raw": return this.#dec.decode(Bytes.decode(from, "raw"));
+            case "raw": return decodeURIComponent(escape(from));//this.#dec.decode(Bytes.decode(from, "raw"));
             case "bytes": return this.#dec.decode(from);
         };
         return from;
