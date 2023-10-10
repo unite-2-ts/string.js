@@ -6,6 +6,10 @@ Powerful string library, atomic, single and simple module...
 
 I want unify all coding or encoding methods of strings (such as UTF-8, UTF-16). I would special category for such string types.
 
+Unfortunately around strings, around the same bits and bytes, there are many misconceptions, many possible interpretations or representations. I just want programmers (and even people) not to be confused with encodings. Yes, I was one of the first to notice a number of oddities, problems. I realized that it is time to create a library for more convenient work with encodings (especially UTF-8, and later UTF-16).
+
+Also, there is an erroneous misconception that the number of characters equals the number of bytes. In fact, this turns out to be a fundamentally incorrect statement.
+
 ## Unification - time is come
 
 ### Part I - JavaScript
