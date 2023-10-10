@@ -17,6 +17,11 @@ Already in development...
 - [x] Binary or Bytes
 - [x] Base64
 
+Also, planned...
+
+- [ ] Full [JSOX](https://github.com/d3x0r/JSOX.git) support
+- [ ] Full [Civet](https://github.com/DanielXMoore/Civet) support
+
 What we want to do?
 
 - [x] Cross-compatibility
