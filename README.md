@@ -51,6 +51,24 @@ Planned...
 
 In JS under classic `char` means `raw` or `bytes` encoding, while under `char8_t` means `utf8` char.
 
+#### Windows UTF-8 locale (Beta)
+
+Unfortunately, you may not notice the difference in encoding due to the formatting of the outgoing string itself (and back to UTF-8 😋). I've done the relevant experiments.
+
+```cpp
+#include <iostream>
+
+//
+int main()
+{
+    char8_t const* utf8 = u8"a Ā 𐀀 文 🦄"; // you can't print it directly...
+    uint8_t const* raw = reinterpret_cast<uint8_t const*>(utf8);
+
+    // you can also try per every symbol
+    std::cout << raw << std::endl;
+}
+```
+
 ### Part III - Uncover WinAPI
 
 Planned...
