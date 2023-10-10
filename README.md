@@ -45,6 +45,12 @@ What we want to do?
 
 Planned...
 
+#### `char8_t` vs classic `char` (misconception)
+
+`char8_t` in C++ is means UTF-8 encoded character, whereas classic `char` is raw byte char. It's fundamental issue known also in JS.
+
+In JS under classic `char` means `raw` or `bytes` encoding, while under `char8_t` means `utf8` char.
+
 ### Part III - Uncover WinAPI
 
 Planned...
