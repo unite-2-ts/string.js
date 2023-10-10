@@ -23,9 +23,34 @@ export class TString {
 }
 
 //
+export class Raw {
+    //
+    static encode(raw = "", toCoding = "raw") {
+        switch (toCoding) {
+            case "utf8": return UTF8.decode(raw, "raw");
+            case "base64": return btoa(raw);
+            case "bytes": return Uint8Array.from(raw, (m) => m.codePointAt(0));
+            case "raw": return raw;
+        };
+        return raw;
+    }
+
+    //
+    static decode(from = "", fromCoding = "utf8") {
+        switch (fromCoding) {
+            case "utf8": return UTF8.encode(from, "raw");
+            case "base64": return atob(from);
+            case "bytes": return String.fromCodePoint(...from);
+            case "raw": from;
+        };
+        return from;
+    }
+}
+
+//
 export class Bytes {
     //
-    static encode(bytes = [], toCoding = "bin") {
+    static encode(bytes = [], toCoding = "bytes") {
         switch (toCoding) {
             case "utf8": return UTF8.decode(bytes, "bytes");
             case "base64": return btoa(String.fromCodePoint(...bytes));
@@ -78,5 +103,6 @@ export class UTF8 {
 //
 export const DataMap = {
     ["bytes"]: Bytes,
-    ["utf8"]: UTF8
+    ["utf8"]: UTF8,
+    ["raw"]: Raw
 };
