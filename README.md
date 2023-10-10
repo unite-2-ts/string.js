@@ -18,7 +18,7 @@ You should always understand at least 3 input variables: the data itself, what e
 
 Here I showing source UTF-8 string, encoded to Base64 correctly, and raw version (i.e. bytes).
 
-- ![Typical](./img/typical.png)
+> ![Typical](./img/typical.png)
 
 ## Unification - time is come
 
