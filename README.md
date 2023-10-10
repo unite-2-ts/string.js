@@ -14,6 +14,12 @@ Also, there is an erroneous misconception that the number of characters equals t
 
 You should always understand at least 3 input variables: the data itself, what encoding it is originally on, and what it should be transcoded to. Otherwise, it would be a complete nonsense. Unfortunately programming languages do not often explicitly specify typing by encoding (strings, bytes, etc.).
 
+## Example of difference of encoding
+
+Here I showing source UTF-8 string, encoded to Base64 correctly, and raw version (i.e. bytes).
+
+- ![Typical](./img/typical.png)
+
 ## Unification - time is come
 
 ### Part I - JavaScript
