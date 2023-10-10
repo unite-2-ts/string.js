@@ -61,11 +61,17 @@ Unfortunately, you may not notice the difference in encoding due to the formatti
 //
 int main()
 {
-    char8_t const* utf8 = u8"a Ā 𐀀 文 🦄"; // you can't print it directly...
+    char8_t const* utf8 = u8"a Ā 𐀀 文 🦄";
     uint8_t const* raw = reinterpret_cast<uint8_t const*>(utf8);
-
-    // you can also try per every symbol
+    
+    // But system thinks as UTF-8
     std::cout << raw << std::endl;
+
+    // What char codes in reality
+    for (uint32_t i = 0; i < std::char_traits<uint8_t>::length(raw); i++) {
+        std::cout << (+raw[i]) << " ";
+    }
+    std::cout << std::endl;
 }
 ```
 
