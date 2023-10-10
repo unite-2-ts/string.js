@@ -10,6 +10,10 @@ Unfortunately around strings, around the same bits and bytes, there are many mis
 
 Also, there is an erroneous misconception that the number of characters equals the number of bytes. In fact, this turns out to be a fundamentally incorrect statement.
 
+## Principles of information coding
+
+You should always understand at least 3 input variables: the data itself, what encoding it is originally on, and what it should be transcoded to. Otherwise, it would be a complete nonsense. Unfortunately programming languages do not often explicitly specify typing by encoding (strings, bytes, etc.).
+
 ## Unification - time is come
 
 ### Part I - JavaScript
