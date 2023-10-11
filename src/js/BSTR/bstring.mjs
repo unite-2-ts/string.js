@@ -39,11 +39,10 @@ export class UTF8 {
     // reinterpret string
     static as(native = "", toCoding = "native") {
         switch (toCoding) {
-            case "utf8":
-            case "native": return native;
-            case "utf8_base64": return btoa(unescape(encodeURIComponent(native)));
-            case "utf8_raw": return unescape(encodeURIComponent(native));//Bytes.encode(this.#enc.encode(utf8), "raw");
-            case "utf8_bytes": return this.#enc.encode(native);
+            case "utf8"       : case "native": return native;
+            case "utf8_base64": case "base64": return btoa(unescape(encodeURIComponent(native)));
+            case "utf8_raw"   : case "raw"   : return unescape(encodeURIComponent(native));//Bytes.encode(this.#enc.encode(utf8), "raw");
+            case "utf8_bytes" : case "bytes" : return this.#enc.encode(native);
         };
         return native;
     }
@@ -51,11 +50,10 @@ export class UTF8 {
     // reinterpret string from
     static from(from = "", fromCoding = "native") {
         switch (fromCoding) {
-            case "utf8":
-            case "native": return from;
-            case "utf8_base64": return decodeURIComponent(escape(atob(from)));
-            case "utf8_raw": return decodeURIComponent(escape(from));//this.#dec.decode(Bytes.decode(from, "raw"));
-            case "utf8_bytes": return this.#dec.decode(from);
+            case "utf8"       : case "native": return from;
+            case "utf8_base64": case "base64": return decodeURIComponent(escape(atob(from)));
+            case "utf8_raw"   : case "raw"   : return decodeURIComponent(escape(from));//this.#dec.decode(Bytes.decode(from, "raw"));
+            case "utf8_bytes" : case "bytes" : return this.#dec.decode(from);
         };
         return from;
     }
@@ -70,11 +68,10 @@ export class UTF8 {
         // reinterpret string
         static as(raw = "", toCoding = "utf8_raw") {
             switch (toCoding) {
-                case "utf8":
-                case "native": return UTF8.from(raw, "utf8_raw");
-                case "utf8_base64": return btoa(raw);
-                case "utf8_bytes": return Uint8Array.from(raw, (m) => m.codePointAt(0));
-                case "utf8_raw": return raw;
+                case "utf8"       : case "native": return UTF8.from(raw, "utf8_raw");
+                case "utf8_base64": case "base64": return btoa(raw);
+                case "utf8_bytes" : case "bytes" : return Uint8Array.from(raw, (m) => m.codePointAt(0));
+                case "utf8_raw"   : case "raw"   : return raw;
             };
             return raw;
         }
@@ -82,11 +79,10 @@ export class UTF8 {
         // reinterpret string from
         static from(from = "", fromCoding = "native") {
             switch (fromCoding) {
-                case "utf8":
-                case "native": return UTF8.as(from, "utf8_raw");
-                case "utf8_base64": return atob(from);
-                case "utf8_bytes": return String.fromCodePoint(...from);
-                case "utf8_raw": from;
+                case "utf8"       : case "native": return UTF8.as(from, "utf8_raw");
+                case "utf8_base64": case "base64": return atob(from);
+                case "utf8_bytes" : case "bytes" : return String.fromCodePoint(...from);
+                case "utf8_raw"   : case "raw"   : from;
             };
             return from;
         }
@@ -102,11 +98,10 @@ export class UTF8 {
         // reinterpret string
         static as(bytes = [], toCoding = "utf8_bytes") {
             switch (toCoding) {
-                case "utf8":
-                case "native": return UTF8.from(bytes, "utf8_bytes");
-                case "utf8_base64": return btoa(String.fromCodePoint(...bytes));
-                case "utf8_bytes": return bytes;
-                case "utf8_raw": return String.fromCodePoint(...bytes);
+                case "utf8"       : case "native": return UTF8.from(bytes, "utf8_bytes");
+                case "utf8_base64": case "base64": return btoa(String.fromCodePoint(...bytes));
+                case "utf8_bytes" : case "bytes" : return bytes;
+                case "utf8_raw"   : case "raw"   : return String.fromCodePoint(...bytes);
             };
             return bytes;
         }
@@ -114,11 +109,10 @@ export class UTF8 {
         // reinterpret string from
         static from(from = "", fromCoding = "native") {
             switch (fromCoding) {
-                case "utf8":
-                case "native": return UTF8.as(from, "utf8_bytes");
-                case "utf8_base64": return Uint8Array.from(atob(from), (m) => m.codePointAt(0));
-                case "utf8_bytes": return from;
-                case "utf8_raw": return Uint8Array.from(from, (m) => m.codePointAt(0));
+                case "utf8"       : case "native": return UTF8.as(from, "utf8_bytes");
+                case "utf8_base64": case "base64": return Uint8Array.from(atob(from), (m) => m.codePointAt(0));
+                case "utf8_bytes" : case "bytes" : return from;
+                case "utf8_raw"   : case "raw"   : return Uint8Array.from(from, (m) => m.codePointAt(0));
             };
             return from;
         }
