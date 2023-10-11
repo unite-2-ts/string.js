@@ -89,10 +89,10 @@ export const Raw = new _Base_("raw", new Map([
 
 //
 export const Shorts = new _Base_("shorts", new Map([
-    ["utf16" , (shorts) => { return $utf16_shorts(shorts); }],
-    ["base64", (shorts) => { return $raw_base64($bytes_raw($as_bytes($utf16_shorts(shorts)))); }],
-    ["bytes" , (shorts) => { return $as_bytes($utf16_shorts(shorts)); }],
-    ["raw"   , (shorts) => { return $bytes_raw($as_bytes($utf16_shorts(shorts))); }],
+    ["utf16" , (shorts) => { return $codes_str(shorts); }],
+    ["base64", (shorts) => { return $raw_base64($bytes_raw($as_bytes(shorts))); }],
+    ["bytes" , (shorts) => { return $as_bytes(shorts); }],
+    ["raw"   , (shorts) => { return $bytes_raw($as_bytes(shorts)); }],
 ]));
 
 //
