@@ -14,6 +14,8 @@ export class TString {
     //
     get length() { return this.$data.length; };
     get base64() { return DataMap[this.$coding].as(this.$data, "base64"); };
+
+    //
     as(coding) { return DataMap[this.$coding].as(this.$data, coding); };
     at(I = 0) { return this.$data.at(I); }
 
@@ -114,9 +116,9 @@ export const UTF16 = new _Base_("utf16", new Map([
 
 //
 export const UTF8 = new _Base_("utf16", new Map([
-    ["base64", (native)=> { return $raw_base64($utf8_raw(native)); }],
-    ["raw", (native)=> {  return $utf8_raw(native); }],//Bytes.encode(this.#enc.encode(native), "raw");
-    ["bytes", (native)=> { return $str_utf8(native); }],
+    ["base64"   , (native)=> { return $raw_base64($utf8_raw(native)); }],
+    ["raw"      , (native)=> {  return $utf8_raw(native); }],//Bytes.encode(this.#enc.encode(native), "raw");
+    ["bytes"    , (native)=> { return $str_utf8(native); }],
 ]));
 
 //
