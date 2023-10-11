@@ -18,6 +18,8 @@ You should always understand at least 3 input variables: the data itself, what e
 
 Here I showing source UTF-8 string, encoded to Base64 correctly, and raw version (i.e. bytes).
 
+### Screenshot is outdated!
+
 > ![Typical](./img/typical.png)
 
 ## Unification - time is come
@@ -27,7 +29,7 @@ Here I showing source UTF-8 string, encoded to Base64 correctly, and raw version
 Already in development...
 
 - [x] UTF-8
-- [ ] UTF-16
+- [x] UTF-16
 - [x] Binary or Bytes
 - [x] Base64
 
@@ -44,27 +46,41 @@ What we want to do?
 #### Such and that example
 
 ```js
-import {UTF8} from "../src/js/index.mjs"
+import {UTF8, UTF16, Bytes} from "../src/js/index.mjs"
 
-// BE ACCURE - UTF8 SAMPLE STRING!
+// BE ACCURE - UNICODE SAMPLE STRING!
 const EXAMPLE0 = "a Ā 𐀀 文 🦄";
 
 //
-const _uint8_ = UTF8.Bytes.from(EXAMPLE0, "utf8");
+const _utf8bytes_ = Bytes.from(EXAMPLE0, "utf8");
 const _utf8_ = EXAMPLE0;
 const _base64_valid_ = "YSDEgCDwkICAIOaWhyDwn6aE";
 
 //
 console.log(_utf8_);
-console.log(_uint8_);
-
-// base64 are abscent term (means, UTF-8 bytes as base64)
-console.log(UTF8.as(_utf8_, "base64"));
-console.log(UTF8.Bytes.as(_uint8_, "base64"));
+console.log(_utf8bytes_);
+console.log(Bytes.as(_utf8bytes_, "utf8"));
 
 //
+console.log(UTF8.as(_utf8_, "base64"));
+console.log(Bytes.as(_utf8bytes_, "base64"));
 console.log(UTF8.as(_utf8_, "raw"));
-console.log(UTF8.Bytes.as(_uint8_, "raw"));
+console.log(Bytes.as(_utf8bytes_, "raw"));
+
+//
+const _utf16bytes_ = Bytes.from(EXAMPLE0, "utf16");
+const _utf16_ = EXAMPLE0;
+
+//
+console.log(_utf16_);
+console.log(_utf16bytes_);
+console.log(Bytes.as(_utf16bytes_, "utf16"));
+
+//
+console.log(UTF16.as(_utf16_, "base64"));
+console.log(Bytes.as(_utf16bytes_, "base64"));
+console.log(UTF16.as(_utf16_, "raw"));
+console.log(Bytes.as(_utf16bytes_, "raw"));
 ```
 
 ### Part II - C++ and STD
