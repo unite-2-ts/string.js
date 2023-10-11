@@ -117,7 +117,7 @@ export const UTF16 = new _Base_("utf16", new Map([
 //
 export const UTF8 = new _Base_("utf16", new Map([
     ["base64"   , (native)=> { return $raw_base64($utf8_raw(native)); }],
-    ["raw"      , (native)=> {  return $utf8_raw(native); }],//Bytes.encode(this.#enc.encode(native), "raw");
+    ["raw"      , (native)=> { return $utf8_raw(native); }],
     ["bytes"    , (native)=> { return $str_utf8(native); }],
 ]));
 
