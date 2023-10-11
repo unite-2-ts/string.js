@@ -58,12 +58,13 @@ const _base64_valid_ = "YSDEgCDwkICAIOaWhyDwn6aE";
 console.log(_utf8_);
 console.log(_uint8_);
 
-//
-console.log(UTF8.as(_utf8_, "utf8_base64"));
-console.log(UTF8.Bytes.as(_uint8_, "utf8_base64"));
-console.log(UTF8.as(_utf8_, "utf8_raw"));
-console.log(UTF8.Bytes.as(_uint8_, "utf8_raw"));
+// base64 are abscent term (means, UTF-8 bytes as base64)
+console.log(UTF8.as(_utf8_, "base64"));
+console.log(UTF8.Bytes.as(_uint8_, "base64"));
 
+//
+console.log(UTF8.as(_utf8_, "raw"));
+console.log(UTF8.Bytes.as(_uint8_, "raw"));
 ```
 
 ### Part II - C++ and STD
