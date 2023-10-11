@@ -22,38 +22,49 @@ export class TString {
     get ["*"]() { return this.$data; };
 }
 
+//
+const $dec = new TextDecoder();
+const $enc = new TextEncoder();
 
+//
+const $raw_base64 = btoa;
+const $base64_raw = atob;
+
+//
+const $codes_str = (from)=>{ return String.fromCodePoint(...from); };
+const $utf16_shorts = (from)=>{ return Uint16Array.from(from.split("").map((e)=>(e.codePointAt(0)))) };
+
+//
+const $str_utf8 = (from)=>{ return $enc.encode(from) };
+const $utf8_str = (from)=>{ return $dec.decode(from) };
+
+//
+const $utf8_raw = (from)=>{ return unescape(encodeURIComponent(from)) };
+const $raw_utf8 = (from)=>{ return decodeURIComponent(escape(from)) };
+
+//
+const $raw_bytes = (from)=>{ return Uint8Array.from(from, (m) => m.codePointAt(0)); };
+const $bytes_raw = $codes_str;
+
+//
+const $as_shorts = (bytes) => { return new Uint16Array(bytes.buffer, bytes.byteOffset); }
+const $as_bytes  = (shorts) => { return new Uint8Array(shorts.buffer, shorts.byteOffset); }
 
 //
 export class Raw {
     
     //
     static $asMap = new Map([
-        ["utf8"  , (raw) => { return Text.from(raw, "utf8_raw");}],
-        ["utf16" , (raw) => { return Text.from(raw, "utf16_raw");}],
-        ["base64", (raw) => { return btoa(raw);}],
-        ["bytes" , (raw) => { return Uint8Array.from(raw, (m) => m.codePointAt(0));}],
-        ["shorts", (raw) => { return new Uint16Array(Text.as(raw, "utf16_bytes").buffer);}],
+        ["utf8"  , (raw) => { return $raw_utf8(raw); }],
+        ["utf16" , (raw) => { return $codes_str($as_shorts($raw_bytes(raw))); }],
+        ["base64", (raw) => { return $raw_base64(raw); }],
+        ["bytes" , (raw) => { return $raw_bytes(raw); }],
+        ["shorts", (raw) => { return $as_shorts($raw_bytes(raw)) }],
     ]);
-
-    //
-    static $fromMap = new Map([
-        ["utf8"  , (from) => { return Text.as(from, "utf8_raw"); }],
-        ["utf16" , (from) => { return Text.as(from, "utf16_raw"); }],
-        ["base64", (from) => { return atob(from); }],
-        ["bytes" , (from) => { return String.fromCodePoint(...from); }],
-        ["shorts", (from) => { return Text.from(new Uint8Array(from.buffer, from.byteOffset), "utf16_bytes"); }],
-    ]);
-
 
     // reinterpret string from
     static as(what = "", whatCoding = "native") {
         return this.$asMap.has(whatCoding) ? this.$asMap.get(whatCoding)(what) : what;
-    }
-
-    // reinterpret string from
-    static from(from = "", fromCoding = "native") {
-        return this.$fromMap.has(fromCoding) ? this.$fromMap.get(fromCoding)(from) : from;
     }
 }
 
@@ -61,29 +72,15 @@ export class Raw {
 export class Shorts {
     //
     static $asMap = new Map([
-        ["utf16" , (shorts) => { return Text.from(shorts, "utf16_shorts"); }],
-        ["base64", (shorts) => { return btoa(Shorts.as(shorts, "raw")); }],
-        ["bytes" , (shorts) => { return Bytes.from(shorts, "shorts"); }],
-        ["raw"   , (shorts) => { return Raw.from(shorts, "shorts"); }],
+        ["utf16" , (shorts) => { return $utf16_shorts(shorts); }],
+        ["base64", (shorts) => { return $raw_base64($bytes_raw($as_bytes($utf16_shorts(shorts)))); }],
+        ["bytes" , (shorts) => { return $as_bytes($utf16_shorts(shorts)); }],
+        ["raw"   , (shorts) => { return $bytes_raw($as_bytes($utf16_shorts(shorts))); }],
     ]);
-
-    //
-    static $fromMap = new Map([
-        ["utf16" , (from) => { return Text.as(from, "utf16_shorts");    }],
-        ["base64", (from) => { return Shorts.from(atob(from), "raw");   }],
-        ["bytes" , (from) => { return Bytes.as(from, "shorts"); }], 
-        ["raw"   , (from) => { return Raw.as(from, "shorts"); }],
-    ]);
-
 
     // reinterpret string from
     static as(what = "", whatCoding = "native") {
         return this.$asMap.has(whatCoding) ? this.$asMap.get(whatCoding)(what) : what;
-    }
-
-    // reinterpret string from
-    static from(from = "", fromCoding = "native") {
-        return this.$fromMap.has(fromCoding) ? this.$fromMap.get(fromCoding)(from) : from;
     }
 }
 
@@ -91,30 +88,16 @@ export class Shorts {
 export class Bytes {
     //
     static $asMap = new Map([
-        ["utf8"     , (bytes) => { return Text.from(bytes, "utf8_bytes"); }],
-        ["utf16"    , (bytes) => { return Text.from(bytes, "utf16_bytes"); }],
-        ["base64"   , (bytes) => { return btoa(String.fromCodePoint(...bytes)); }],
-        ["raw"      , (bytes) => { return String.fromCodePoint(...bytes); }],
-        ["shorts"   , (bytes) => { return new Uint16Array(bytes.buffer, bytes.byteOffset); }],
-    ]);
-
-    //
-    static $fromMap = new Map([
-        ["utf8"  , (from) => { return Text.as(from, "utf8_bytes"); }],
-        ["utf16" , (from) => { return Text.as(from, "utf16_bytes"); }],
-        ["base64", (from) => { return Uint8Array.from(atob(from), (m) => m.codePointAt(0)); }],
-        ["raw"   , (from) => { return Uint8Array.from(from, (m) => m.codePointAt(0)); }],
-        ["shorts", (from) => { return new Uint8Array(from.buffer, from.byteOffset); }],
+        ["utf8"     , (bytes) => { return $utf8_str(bytes); }],
+        ["utf16"    , (bytes) => { return $codes_str($as_shorts(bytes)); }],
+        ["base64"   , (bytes) => { return $raw_base64($bytes_raw(bytes)); }],
+        ["raw"      , (bytes) => { return $bytes_raw(bytes); }],
+        ["shorts"   , (bytes) => { return $as_shorts(bytes); }],
     ]);
 
     // reinterpret string from
     static as(what = "", whatCoding = "native") {
         return this.$asMap.has(whatCoding) ? this.$asMap.get(whatCoding)(what) : what;
-    }
-
-    // reinterpret string from
-    static from(from = "", fromCoding = "native") {
-        return this.$fromMap.has(fromCoding) ? this.$fromMap.get(fromCoding)(from) : from;
     }
 }
 
@@ -123,28 +106,15 @@ export class UTF16 {
 
     //
     static $asMap = new Map([
-        ["base64", (native)=> { return btoa(Text.as(native, "utf16_raw")) }],
-        ["bytes" , (native)=> { return new Uint8Array(Text.as(native, "utf16_shorts").buffer) }],
-        ["raw", (native)=> { return String.fromCodePoint(...Text.as(native, "utf16_bytes")) }],
-        ["shorts", (native)=> { return Uint16Array.from(native.split("").map((e)=>(e.codePointAt(0)))) }],
-    ]);
-
-    //
-    static $fromMap = new Map([
-        ["base64"  , (from)=> { return Text.from(atob(from), "utf16_raw"); }],
-        ["bytes"   , (from)=> { return Text.from(new Uint16Array(from.buffer, from.byteOffset), "utf16_shorts"); }],
-        ["raw"     , (from)=> { return Text.from(Uint8Array.from(from, (m) => m.codePointAt(0)), "utf16_bytes"); }],
-        ["shorts"  , (from)=> { return String.fromCodePoint(...from); }],
+        ["base64"   , (native)=> { return $raw_base64($bytes_raw($as_bytes($utf16_shorts(native)))); }],
+        ["bytes"    , (native)=> { return $as_bytes($utf16_shorts(native)); }],
+        ["raw"      , (native)=> { return $bytes_raw($as_bytes($utf16_shorts(native))); }],
+        ["shorts"   , (native)=> { return $utf16_shorts(native); }],
     ]);
 
     // reinterpret string from
     static as(what = "", whatCoding = "native") {
         return this.$asMap.has(whatCoding) ? this.$asMap.get(whatCoding)(what) : what;
-    }
-
-    // reinterpret string from
-    static from(from = "", fromCoding = "native") {
-        return this.$fromMap.has(fromCoding) ? this.$fromMap.get(fromCoding)(from) : from;
     }
 }
 
@@ -155,26 +125,14 @@ export class UTF8 {
 
     //
     static $asMap = new Map([
-        ["base64", (native)=> { return btoa(Text.as(native, "utf8_raw")) }],
-        ["raw", (native)=> {  return unescape(encodeURIComponent(native)) }],//Bytes.encode(this.#enc.encode(native), "raw");
-        ["bytes", (native)=> { return this.#enc.encode(native) }],
-    ]);
-
-    //
-    static $fromMap = new Map([
-        ["base64"   , (from)=> { return Text.from(atob(from), "utf8_raw"); }],
-        ["raw"      , (from)=> { return decodeURIComponent(escape(from)); }],//this.#dec.decode(Bytes.decode(from, "raw"));
-        ["bytes"    , (from)=> { return this.#dec.decode(from); }],
+        ["base64", (native)=> { return $raw_base64($utf8_raw(native)); }],
+        ["raw", (native)=> {  return $utf8_raw(native); }],//Bytes.encode(this.#enc.encode(native), "raw");
+        ["bytes", (native)=> { return $str_utf8(native); }],
     ]);
 
     // reinterpret string from
     static as(what = "", whatCoding = "native") {
         return this.$asMap.has(whatCoding) ? this.$asMap.get(whatCoding)(what) : what;
-    }
-
-    // reinterpret string from
-    static from(from = "", fromCoding = "native") {
-        return this.$fromMap.has(fromCoding) ? this.$fromMap.get(fromCoding)(from) : from;
     }
 }
 
@@ -182,29 +140,18 @@ export class UTF8 {
 export class Text {
     //
     static $asMap   = new Map([  ]);
-    static $fromMap = new Map([  ]);
 
     // reinterpret string from
     static as(what = "", whatCoding = "native") {
         return this.$asMap.has(whatCoding) ? this.$asMap.get(whatCoding)(what) : what;
     }
 
-    // reinterpret string from
-    static from(from = "", fromCoding = "native") {
-        return this.$fromMap.has(fromCoding) ? this.$fromMap.get(fromCoding)(from) : from;
-    }
-
     //
     static {
-        for (const $ of Bytes.$fromMap)     { this.$fromMap .set("bytes_"   + $[0], $[1]); }
         for (const $ of Bytes.$asMap)       { this.$asMap   .set("bytes_"   + $[0], $[1]); }
-        for (const $ of Shorts.$fromMap)    { this.$fromMap .set("shorts_"  + $[0], $[1]); }
         for (const $ of Shorts.$asMap)      { this.$asMap   .set("shorts_"  + $[0], $[1]); }
-        for (const $ of Raw.$fromMap)       { this.$fromMap .set("raw_"     + $[0], $[1]); }
         for (const $ of Raw.$asMap)         { this.$asMap   .set("raw_"     + $[0], $[1]); }
-        for (const $ of UTF8.$fromMap)      { this.$fromMap .set("utf8_"    + $[0], $[1]); }
         for (const $ of UTF8.$asMap)        { this.$asMap   .set("utf8_"    + $[0], $[1]); }
-        for (const $ of UTF16.$fromMap)     { this.$fromMap .set("utf16_"   + $[0], $[1]); }
         for (const $ of UTF16.$asMap)       { this.$asMap   .set("utf16_"   + $[0], $[1]); }
     }
 }
