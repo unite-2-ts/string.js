@@ -13,8 +13,8 @@ export class TString {
 
     //
     get length() { return this.$data.length; };
-    get base64() { return DataMap[this.$coding].to(this.$data, "base64"); };
-    to(coding) { return DataMap[this.$coding].to(this.$data, coding); };
+    get base64() { return DataMap[this.$coding].as(this.$data, "base64"); };
+    as(coding) { return DataMap[this.$coding].as(this.$data, coding); };
     at(I = 0) { return this.$data.at(I); }
 
     // official string value of...
@@ -24,8 +24,13 @@ export class TString {
 
 //
 export class Raw {
-    //
+    // true casting or conversion of string (as is)
     static to(raw = "", toCoding = "raw") {
+        throw new Error("Raw string have no exact encoding, use 'as' op...");
+    }
+
+    // reinterpret string
+    static as(raw = "", toCoding = "raw") {
         switch (toCoding) {
             case "utf8": return UTF8.from(raw, "raw");
             case "base64": return btoa(raw);
@@ -35,10 +40,10 @@ export class Raw {
         return raw;
     }
 
-    //
+    // reinterpret string from
     static from(from = "", fromCoding = "utf8") {
         switch (fromCoding) {
-            case "utf8": return UTF8.to(from, "raw");
+            case "utf8": return UTF8.as(from, "raw");
             case "base64": return atob(from);
             case "bytes": return String.fromCodePoint(...from);
             case "raw": from;
@@ -49,8 +54,13 @@ export class Raw {
 
 //
 export class Bytes {
-    //
+    // true casting or conversion of string (as is)
     static to(bytes = [], toCoding = "bytes") {
+        throw new Error("Bytes have no exact encoding...");
+    }
+
+    // reinterpret string
+    static as(bytes = [], toCoding = "bytes") {
         switch (toCoding) {
             case "utf8": return UTF8.from(bytes, "bytes");
             case "base64": return btoa(String.fromCodePoint(...bytes));
@@ -60,10 +70,10 @@ export class Bytes {
         return bytes;
     }
 
-    //
+    // reinterpret string from
     static from(from = "", fromCoding = "utf8") {
         switch (fromCoding) {
-            case "utf8": return UTF8.to(from, "bytes");
+            case "utf8": return UTF8.as(from, "bytes");
             case "base64": return Uint8Array.from(atob(from), (m) => m.codePointAt(0));
             case "bytes": return from;
             case "raw": return Uint8Array.from(from, (m) => m.codePointAt(0));
@@ -77,8 +87,13 @@ export class UTF8 {
     static #dec = new TextDecoder();
     static #enc = new TextEncoder();
 
-    //
+    // true casting or conversion of string (as is)
     static to(utf8 = "", toCoding = "utf8") {
+        throw new Error("Conversion not implemented...");
+    }
+
+    // reinterpret string
+    static as(utf8 = "", toCoding = "utf8") {
         switch (toCoding) {
             case "utf8": return utf8;
             case "base64": return btoa(unescape(encodeURIComponent(utf8)));
@@ -88,7 +103,7 @@ export class UTF8 {
         return utf8;
     }
 
-    //
+    // reinterpret string from
     static from(from = "", fromCoding = "utf8") {
         switch (fromCoding) {
             case "utf8": return from;
