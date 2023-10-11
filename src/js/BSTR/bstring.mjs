@@ -27,6 +27,118 @@ export class TString {
 
 
 //
+export class UTF16 {
+    // reinterpret string
+    static as(native = "", toCoding = "native") {
+        switch (toCoding) {
+            case "utf16"        : case "native": return native;
+            case "utf16_base64" : case "base64": return btoa(UTF16.as(native, "utf16_raw"));
+            case "utf16_bytes"  : case "bytes" : return new Uint8Array(UTF16.as(native, "shorts").buffer);
+            case "utf16_raw"    : case "raw"   : return String.fromCodePoint(...UTF16.as(native, "bytes"));
+            case "utf16_shorts" : case "shorts": return Uint16Array.from(native.split("").map((e)=>(e.codePointAt(0))));
+        };
+        return native;
+    }
+
+    // reinterpret string from
+    static from(from = "", fromCoding = "native") {
+        switch (fromCoding) {
+            case "utf16"        : case "native" : return from;
+            case "utf16_base64" : case "base64" : return UTF16.from(atob(from), "utf16_raw");
+            case "utf16_bytes"  : case "bytes"  : return UTF16.from(new Uint16Array(from.buffer, from.byteOffset), "shorts");
+            case "utf16_raw"    : case "raw"    : return UTF16.from(Uint8Array.from(from, (m) => m.codePointAt(0)), "bytes");
+            case "utf16_shorts" : case "shorts" : return String.fromCodePoint(...from);
+        };
+        return from;
+    }
+
+    //
+    static Raw = class Raw {
+        // reinterpret string
+        static as(raw = "", toCoding = "utf16_raw") {
+            switch (toCoding) {
+                case "utf16"       : case "native": return UTF16.from(raw, "utf16_raw");
+                case "utf16_base64": case "base64": return btoa(raw);
+                case "utf16_bytes" : case "bytes" : return Uint8Array.from(raw, (m) => m.codePointAt(0));
+                case "utf16_raw"   : case "raw"   : return raw;
+                case "utf16_shorts": case "shorts": return new Uint16Array(UTF16.Raw.as(raw, "utf16_bytes").buffer);
+            };
+            return raw;
+        }
+
+        // reinterpret string from
+        static from(from = "", fromCoding = "native") {
+            switch (fromCoding) {
+                case "utf16"       : case "native": return UTF16.as(from, "utf16_raw");
+                case "utf16_base64": case "base64": return atob(from);
+                case "utf16_bytes" : case "bytes" : return String.fromCodePoint(...from);
+                case "utf16_raw"   : case "raw"   : return from;
+                case "utf16_shorts": case "shorts": return UTF16.Raw.from(new Uint8Array(from.buffer, from.byteOffset), "utf16_bytes");
+            };
+            return from;
+        }
+    }
+
+    //
+    static Shorts = class Shorts {
+        // reinterpret string
+        static as(shorts = [], toCoding = "utf16_bytes") {
+            switch (toCoding) {
+                case "utf16"       : case "native": return UTF16.from(shorts, "utf16_shorts");
+                case "utf16_base64": case "base64": return btoa(UTF16.Shorts.as(shorts, "utf16_raw"));
+                case "utf16_bytes" : case "bytes" : return UTF16.Bytes.from(shorts, "utf16_shorts");
+                case "utf16_raw"   : case "raw"   : return UTF16.Raw.from(shorts, "utf16_shorts");
+                case "utf16_shorts": case "shorts": return shorts;
+            };
+            return shorts;
+        }
+
+        // reinterpret string from
+        static from(from = "", fromCoding = "native") {
+            switch (fromCoding) {
+                case "utf16"       : case "native": return UTF16.as(from, "utf16_shorts");
+                case "utf16_base64": case "base64": return UTF16.Shorts.from(atob(from), "utf16_raw");
+                case "utf16_bytes" : case "bytes" : return UTF16.Bytes.as(from, "utf16_shorts");
+                case "utf16_raw"   : case "raw"   : return UTF16.Raw.as(from, "utf16_shorts");
+                case "utf16_shorts": case "shorts": return from;
+            };
+            return from;
+        }
+    }
+
+    //
+    static Bytes = class Bytes {
+        // reinterpret string
+        static as(bytes = [], toCoding = "utf16_bytes") {
+            switch (toCoding) {
+                case "utf16"       : case "native": return UTF16.from(bytes, "utf16_bytes");
+                case "utf16_base64": case "base64": return btoa(String.fromCodePoint(...bytes));
+                case "utf16_bytes" : case "bytes" : return bytes;
+                case "utf16_raw"   : case "raw"   : return String.fromCodePoint(...bytes);
+                case "utf16_shorts": case "shorts": return new Uint16Array(bytes.buffer, bytes.byteOffset);
+            };
+            return bytes;
+        }
+
+        // reinterpret string from
+        static from(from = "", fromCoding = "native") {
+            switch (fromCoding) {
+                case "utf16"       : case "native": return UTF16.as(from, "utf16_bytes");
+                case "utf16_base64": case "base64": return Uint8Array.from(atob(from), (m) => m.codePointAt(0));
+                case "utf16_bytes" : case "bytes" : return from;
+                case "utf16_raw"   : case "raw"   : return Uint8Array.from(from, (m) => m.codePointAt(0));
+                case "utf16_shorts": case "shorts": return new Uint8Array(from.buffer, from.byteOffset);
+            };
+            return from;
+        }
+    }
+}
+
+
+
+
+
+//
 export class UTF8 {
     static #dec = new TextDecoder();
     static #enc = new TextEncoder();
@@ -125,6 +237,11 @@ export const DataMap = {
     ["utf8_raw"]: UTF8.Raw,
     ["utf8"]: UTF8,
 
-    // ???
-    ["native"]: UTF8
+    // native...
+    ["utf16_bytes"]: UTF16.Bytes,
+    ["utf16_raw"]: UTF16.Raw,
+    ["utf16"]: UTF16,
+
+    // native...
+    ["native"]: UTF16
 };
