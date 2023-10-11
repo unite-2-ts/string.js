@@ -59,10 +59,10 @@ console.log(_utf8_);
 console.log(_uint8_);
 
 //
-console.log(UTF8.to(_utf8_, "base64"));
-console.log(Bytes.to(_uint8_, "base64"));
-console.log(UTF8.to(_utf8_, "raw"));
-console.log(Bytes.to(_uint8_, "raw"));
+console.log(UTF8.as(_utf8_, "base64"));
+console.log(Bytes.as(_uint8_, "base64"));
+console.log(UTF8.as(_utf8_, "raw"));
+console.log(Bytes.as(_uint8_, "raw"));
 
 ```
 
