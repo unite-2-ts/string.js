@@ -4,26 +4,6 @@
 // "bytes" - Uint8Array binary data
 // "base64" - base64 representation
 
-// TODO! needs to rewrite...
-export class TString {
-    //
-    constructor(from = "", fromCoding = "utf8", toCoding = "utf8") {
-        this.$data = DataMap[this.$coding = toCoding].decode(from, fromCoding);
-    }
-
-    //
-    get length() { return this.$data.length; };
-    get base64() { return DataMap[this.$coding].as(this.$data, "base64"); };
-
-    //
-    as(coding) { return DataMap[this.$coding].as(this.$data, coding); };
-    at(I = 0) { return this.$data.at(I); }
-
-    // official string value of...
-    toString() { return this.$data; };
-    get ["*"]() { return this.$data; };
-}
-
 //
 const utf8_dec = new TextDecoder();
 const utf8_enc = new TextEncoder();
@@ -104,13 +84,3 @@ export default class BString {
         return from.has(pair[1]) ? from.get(pair[1])(what) : what;
     }
 }
-
-/*
-//
-export const Text = new Rules$("text", new Map([]));
-
-// assign an library
-Object.entries(DataMap).map(([$pfx, $lib])=>{
-    for (const $ of $lib.$asMap) { Text.$asMap.set($pfx + "_" + $[0], $[1]); }
-});
-*/
