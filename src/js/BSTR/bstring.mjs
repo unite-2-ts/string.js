@@ -22,65 +22,7 @@ export class TString {
     get ["*"]() { return this.$data; };
 }
 
-//
-export class Raw {
-    // true casting or conversion of string (as is)
-    static to(raw = "", toCoding = "raw") {
-        throw new Error("Raw string have no exact encoding, use 'as' op...");
-    }
 
-    // reinterpret string
-    static as(raw = "", toCoding = "raw") {
-        switch (toCoding) {
-            case "utf8": return UTF8.from(raw, "raw");
-            case "base64": return btoa(raw);
-            case "bytes": return Uint8Array.from(raw, (m) => m.codePointAt(0));
-            case "raw": return raw;
-        };
-        return raw;
-    }
-
-    // reinterpret string from
-    static from(from = "", fromCoding = "utf8") {
-        switch (fromCoding) {
-            case "utf8": return UTF8.as(from, "raw");
-            case "base64": return atob(from);
-            case "bytes": return String.fromCodePoint(...from);
-            case "raw": from;
-        };
-        return from;
-    }
-}
-
-//
-export class Bytes {
-    // true casting or conversion of string (as is)
-    static to(bytes = [], toCoding = "bytes") {
-        throw new Error("Bytes have no exact encoding...");
-    }
-
-    // reinterpret string
-    static as(bytes = [], toCoding = "bytes") {
-        switch (toCoding) {
-            case "utf8": return UTF8.from(bytes, "bytes");
-            case "base64": return btoa(String.fromCodePoint(...bytes));
-            case "bytes": return bytes;
-            case "raw": return String.fromCodePoint(...bytes);
-        };
-        return bytes;
-    }
-
-    // reinterpret string from
-    static from(from = "", fromCoding = "utf8") {
-        switch (fromCoding) {
-            case "utf8": return UTF8.as(from, "bytes");
-            case "base64": return Uint8Array.from(atob(from), (m) => m.codePointAt(0));
-            case "bytes": return from;
-            case "raw": return Uint8Array.from(from, (m) => m.codePointAt(0));
-        };
-        return from;
-    }
-}
 
 //
 export class UTF8 {
@@ -88,36 +30,106 @@ export class UTF8 {
     static #enc = new TextEncoder();
 
     // true casting or conversion of string (as is)
-    static to(utf8 = "", toCoding = "utf8") {
+    /*static to(utf8 = "", toCoding = "utf8") {
         throw new Error("Conversion not implemented...");
-    }
+    }*/
 
     // reinterpret string
-    static as(utf8 = "", toCoding = "utf8") {
+    static as(native = "", toCoding = "utf8") {
         switch (toCoding) {
-            case "utf8": return utf8;
-            case "base64": return btoa(unescape(encodeURIComponent(utf8)));
-            case "raw": return unescape(encodeURIComponent(utf8));//Bytes.encode(this.#enc.encode(utf8), "raw");
-            case "bytes": return this.#enc.encode(utf8);
+            case "utf8":
+            case "native": return native;
+            case "utf8_base64": return btoa(unescape(encodeURIComponent(native)));
+            case "utf8_raw": return unescape(encodeURIComponent(native));//Bytes.encode(this.#enc.encode(utf8), "raw");
+            case "utf8_bytes": return this.#enc.encode(native);
         };
-        return utf8;
+        return native;
     }
 
     // reinterpret string from
     static from(from = "", fromCoding = "utf8") {
         switch (fromCoding) {
-            case "utf8": return from;
-            case "base64": return decodeURIComponent(escape(atob(from)));
-            case "raw": return decodeURIComponent(escape(from));//this.#dec.decode(Bytes.decode(from, "raw"));
-            case "bytes": return this.#dec.decode(from);
+            case "utf8":
+            case "native": return from;
+            case "utf8_base64": return decodeURIComponent(escape(atob(from)));
+            case "utf8_raw": return decodeURIComponent(escape(from));//this.#dec.decode(Bytes.decode(from, "raw"));
+            case "utf8_bytes": return this.#dec.decode(from);
         };
         return from;
     }
+
+    //
+    static Raw = class Raw {
+        // true casting or conversion of string (as is)
+        /*static to(raw = "", toCoding = "utf8_raw") {
+            throw new Error("Raw string have no exact encoding, use 'as' op...");
+        }*/
+
+        // reinterpret string
+        static as(raw = "", toCoding = "utf8_raw") {
+            switch (toCoding) {
+                case "utf8":
+                case "native": return UTF8.from(raw, "utf8_raw");
+                case "utf8_base64": return btoa(raw);
+                case "utf8_bytes": return Uint8Array.from(raw, (m) => m.codePointAt(0));
+                case "utf8_raw": return raw;
+            };
+            return raw;
+        }
+
+        // reinterpret string from
+        static from(from = "", fromCoding = "utf8") {
+            switch (fromCoding) {
+                case "utf8":
+                case "native": return UTF8.as(from, "utf8_raw");
+                case "utf8_base64": return atob(from);
+                case "utf8_bytes": return String.fromCodePoint(...from);
+                case "utf8_raw": from;
+            };
+            return from;
+        }
+    }
+
+    //
+    static Bytes = class Bytes {
+        // true casting or conversion of string (as is)
+        /*static to(bytes = [], toCoding = "utf8_bytes") {
+            throw new Error("Bytes have no exact encoding...");
+        }*/
+
+        // reinterpret string
+        static as(bytes = [], toCoding = "utf8_bytes") {
+            switch (toCoding) {
+                case "utf8":
+                case "native": return UTF8.from(bytes, "utf8_bytes");
+                case "utf8_base64": return btoa(String.fromCodePoint(...bytes));
+                case "utf8_bytes": return bytes;
+                case "utf8_raw": return String.fromCodePoint(...bytes);
+            };
+            return bytes;
+        }
+
+        // reinterpret string from
+        static from(from = "", fromCoding = "utf8") {
+            switch (fromCoding) {
+                case "utf8":
+                case "native": return UTF8.as(from, "utf8_bytes");
+                case "utf8_base64": return Uint8Array.from(atob(from), (m) => m.codePointAt(0));
+                case "utf8_bytes": return from;
+                case "utf8_raw": return Uint8Array.from(from, (m) => m.codePointAt(0));
+            };
+            return from;
+        }
+    }
+
 }
 
 //
 export const DataMap = {
-    ["bytes"]: Bytes,
+    ["utf8_bytes"]: UTF8.Bytes,
+    ["utf8_raw"]: UTF8.Raw,
     ["utf8"]: UTF8,
-    ["raw"]: Raw
+
+    // ???
+    ["native"]: UTF8
 };
