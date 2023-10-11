@@ -13,8 +13,8 @@ export class TString {
 
     //
     get length() { return this.$data.length; };
-    get base64() { return DataMap[this.$coding].encode(this.$data, "base64"); };
-    to(coding) { return DataMap[this.$coding].encode(this.$data, coding); };
+    get base64() { return DataMap[this.$coding].to(this.$data, "base64"); };
+    to(coding) { return DataMap[this.$coding].to(this.$data, coding); };
     at(I = 0) { return this.$data.at(I); }
 
     // official string value of...
@@ -25,9 +25,9 @@ export class TString {
 //
 export class Raw {
     //
-    static encode(raw = "", toCoding = "raw") {
+    static to(raw = "", toCoding = "raw") {
         switch (toCoding) {
-            case "utf8": return UTF8.decode(raw, "raw");
+            case "utf8": return UTF8.from(raw, "raw");
             case "base64": return btoa(raw);
             case "bytes": return Uint8Array.from(raw, (m) => m.codePointAt(0));
             case "raw": return raw;
@@ -36,9 +36,9 @@ export class Raw {
     }
 
     //
-    static decode(from = "", fromCoding = "utf8") {
+    static from(from = "", fromCoding = "utf8") {
         switch (fromCoding) {
-            case "utf8": return UTF8.encode(from, "raw");
+            case "utf8": return UTF8.to(from, "raw");
             case "base64": return atob(from);
             case "bytes": return String.fromCodePoint(...from);
             case "raw": from;
@@ -50,9 +50,9 @@ export class Raw {
 //
 export class Bytes {
     //
-    static encode(bytes = [], toCoding = "bytes") {
+    static to(bytes = [], toCoding = "bytes") {
         switch (toCoding) {
-            case "utf8": return UTF8.decode(bytes, "bytes");
+            case "utf8": return UTF8.from(bytes, "bytes");
             case "base64": return btoa(String.fromCodePoint(...bytes));
             case "bytes": return bytes;
             case "raw": return String.fromCodePoint(...bytes);
@@ -61,9 +61,9 @@ export class Bytes {
     }
 
     //
-    static decode(from = "", fromCoding = "utf8") {
+    static from(from = "", fromCoding = "utf8") {
         switch (fromCoding) {
-            case "utf8": return UTF8.encode(from, "bytes");
+            case "utf8": return UTF8.to(from, "bytes");
             case "base64": return Uint8Array.from(atob(from), (m) => m.codePointAt(0));
             case "bytes": return from;
             case "raw": return Uint8Array.from(from, (m) => m.codePointAt(0));
@@ -78,7 +78,7 @@ export class UTF8 {
     static #enc = new TextEncoder();
 
     //
-    static encode(utf8 = "", toCoding = "utf8") {
+    static to(utf8 = "", toCoding = "utf8") {
         switch (toCoding) {
             case "utf8": return utf8;
             case "base64": return btoa(unescape(encodeURIComponent(utf8)));
@@ -89,7 +89,7 @@ export class UTF8 {
     }
 
     //
-    static decode(from = "", fromCoding = "utf8") {
+    static from(from = "", fromCoding = "utf8") {
         switch (fromCoding) {
             case "utf8": return from;
             case "base64": return decodeURIComponent(escape(atob(from)));
