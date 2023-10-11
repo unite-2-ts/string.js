@@ -24,6 +24,8 @@ export class TString {
 
 
 
+
+
 //
 export class UTF8 {
     static #dec = new TextDecoder();
@@ -35,7 +37,7 @@ export class UTF8 {
     }*/
 
     // reinterpret string
-    static as(native = "", toCoding = "utf8") {
+    static as(native = "", toCoding = "native") {
         switch (toCoding) {
             case "utf8":
             case "native": return native;
@@ -47,7 +49,7 @@ export class UTF8 {
     }
 
     // reinterpret string from
-    static from(from = "", fromCoding = "utf8") {
+    static from(from = "", fromCoding = "native") {
         switch (fromCoding) {
             case "utf8":
             case "native": return from;
@@ -78,7 +80,7 @@ export class UTF8 {
         }
 
         // reinterpret string from
-        static from(from = "", fromCoding = "utf8") {
+        static from(from = "", fromCoding = "native") {
             switch (fromCoding) {
                 case "utf8":
                 case "native": return UTF8.as(from, "utf8_raw");
@@ -110,7 +112,7 @@ export class UTF8 {
         }
 
         // reinterpret string from
-        static from(from = "", fromCoding = "utf8") {
+        static from(from = "", fromCoding = "native") {
             switch (fromCoding) {
                 case "utf8":
                 case "native": return UTF8.as(from, "utf8_bytes");
@@ -121,7 +123,6 @@ export class UTF8 {
             return from;
         }
     }
-
 }
 
 //
