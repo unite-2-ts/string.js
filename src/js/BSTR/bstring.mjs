@@ -71,6 +71,7 @@ class _Base_ {
 
 //
 export const Base64 = new _Base_("base64", new Map([
+    ["raw"   , (raw) => { return $base64_raw(raw); }],
     ["utf8"  , (raw) => { return $raw_utf8($base64_raw(raw)); }],
     ["utf16" , (raw) => { return $codes_str($as_shorts($raw_bytes($base64_raw(raw)))); }],
     ["bytes" , (raw) => { return $raw_bytes($base64_raw(raw)); }],
