@@ -33,7 +33,7 @@ const $raw_base64 = btoa;
 const $base64_raw = atob;
 
 //
-const $codes_str = (from)=>{ return String.fromCodePoint(...from); };
+const $codes_str    = (from)=>{ return String.fromCodePoint(...from); };
 const $utf16_shorts = (from)=>{ return Uint16Array.from(from.split("").map((e)=>(e.codePointAt(0)))) };
 
 //
@@ -41,11 +41,11 @@ const $str_utf8 = (from)=>{ return $enc.encode(from) };
 const $utf8_str = (from)=>{ return $dec.decode(from) };
 
 //
-const $utf8_raw = (from)=>{ return unescape(encodeURIComponent(from)) };
-const $raw_utf8 = (from)=>{ return decodeURIComponent(escape(from)) };
+const $utf8_raw = (from) => { return unescape(encodeURIComponent(from)) };
+const $raw_utf8 = (from) => { return decodeURIComponent(escape(from)) };
 
 //
-const $raw_bytes = (from)=>{ return Uint8Array.from(from, (m) => m.codePointAt(0)); };
+const $raw_bytes = (from) => { return Uint8Array.from(from, (m) => m.codePointAt(0)); };
 const $bytes_raw = $codes_str;
 
 //
@@ -108,17 +108,17 @@ export const Bytes = new _Base_("bytes", new Map([
 
 //
 export const UTF16 = new _Base_("utf16", new Map([
-    ["base64"   , (native)=> { return $raw_base64($bytes_raw($as_bytes($utf16_shorts(native)))); }],
-    ["bytes"    , (native)=> { return $as_bytes($utf16_shorts(native)); }],
-    ["raw"      , (native)=> { return $bytes_raw($as_bytes($utf16_shorts(native))); }],
-    ["shorts"   , (native)=> { return $utf16_shorts(native); }],
+    ["base64"   , (native) => { return $raw_base64($bytes_raw($as_bytes($utf16_shorts(native)))); }],
+    ["bytes"    , (native) => { return $as_bytes($utf16_shorts(native)); }],
+    ["raw"      , (native) => { return $bytes_raw($as_bytes($utf16_shorts(native))); }],
+    ["shorts"   , (native) => { return $utf16_shorts(native); }],
 ]));
 
 //
-export const UTF8 = new _Base_("utf16", new Map([
-    ["base64"   , (native)=> { return $raw_base64($utf8_raw(native)); }],
-    ["raw"      , (native)=> { return $utf8_raw(native); }],
-    ["bytes"    , (native)=> { return $str_utf8(native); }],
+export const UTF8 = new _Base_("utf8", new Map([
+    ["base64"   , (native) => { return $raw_base64($utf8_raw(native)); }],
+    ["raw"      , (native) => { return $utf8_raw(native); }],
+    ["bytes"    , (native) => { return $str_utf8(native); }],
 ]));
 
 //
