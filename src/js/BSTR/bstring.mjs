@@ -24,17 +24,15 @@ const binary_base64 = btoa;
 const base64_binary = atob;
 
 //
-const codes_str  = (from)=>{ return String.fromCodePoint(...from); };
-const utf16_uint16 = (from)=>{ return Uint16Array.from(from.split("").map((e)=>(e.codePointAt(0)))) };
+const codes_str    = (src) => { return String.fromCodePoint(...src); };
+const utf16_uint16 = (src) => { return Uint16Array.from(src.split("").map((e)=>(e.codePointAt(0)))) };
+const utf8_binary  = (src) => { return unescape(encodeURIComponent(src)) };
+const binary_utf8  = (src) => { return decodeURIComponent(escape(src)) };
+const binary_uint8 = (src) => { return Uint8Array.from(src, (m) => m.codePointAt(0)); };
 
 //
-const utf8_binary  = (from) => { return unescape(encodeURIComponent(from)) };
-const binary_utf8  = (from) => { return decodeURIComponent(escape(from)) };
-const binary_uint8   = (from) => { return Uint8Array.from(from, (m) => m.codePointAt(0)); };
-
-//
-const as_uint16 = (src) => { return new Uint16Array(src.buffer, src.byteOffset); }
-const as_uint8  = (src) => { return new Uint8Array(src.buffer, src.byteOffset); }
+const as_uint16 = (src) => { return new Uint16Array(src.buffer, src.byteOffset, src.byteLength >> 1); }
+const as_uint8  = (src) => { return new Uint8Array (src.buffer, src.byteOffset, src.byteLength >> 0); }
 
 //
 const u16 = "uint16", u8 = "uint8", bstr = "binary", utf16 = "utf16", utf8 = "utf8", b64 = "base64";
