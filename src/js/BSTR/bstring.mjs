@@ -37,44 +37,47 @@ const as_uint16 = (src) => { return new Uint16Array(src.buffer, src.byteOffset);
 const as_uint8  = (src) => { return new Uint8Array(src.buffer, src.byteOffset); }
 
 //
+const u16 = "uint16", u8 = "uint8", bstr = "binary", utf16 = "utf16", utf8 = "utf8", b64 = "base64";
+
+//
 export const AsMap = {
-    ["uint16"]: m([
-        ["utf16"    , (src) => { return codes_str(src);                             }],
-        ["base64"   , (src) => { return binary_base64(r("uint16", "binary", src));  }],
-        ["uint8"    , (src) => { return as_uint8(src);                              }],
-        ["binary"   , (src) => { return codes_str(as_uint8(src));                   }],
+    [u16]: m([
+        [utf16  , (src) => { return codes_str(src);                   }],
+        [b64    , (src) => { return binary_base64(r(u16, bstr, src)); }],
+        [u8     , (src) => { return as_uint8(src);                    }],
+        [bstr   , (src) => { return codes_str(as_uint8(src));         }],
     ]),
-    ["uint8"]: m([
-        ["utf8"     , (src) => { return use_dec("utf8", src);                       }],
-        ["utf16"    , (src) => { return codes_str(as_uint16(src));                  }],
-        ["base64"   , (src) => { return binary_base64(codes_str(src));              }],
-        ["binary"   , (src) => { return codes_str(src);                             }],
-        ["uint16"   , (src) => { return as_uint16(src);                             }],
+    [u8]: m([
+        [utf8   , (src) => { return use_dec('utf8', src);             }],
+        [utf16  , (src) => { return codes_str(as_uint16(src));        }],
+        [b64    , (src) => { return binary_base64(codes_str(src));    }],
+        [bstr   , (src) => { return codes_str(src);                   }],
+        [u16    , (src) => { return as_uint16(src);                   }],
     ]),
-    ["binary"]: m([
-        ["utf8"     , (src) => { return binary_utf8(src);                           }],
-        ["utf16"    , (src) => { return codes_str(r("binary", "uint16", src));      }],
-        ["base64"   , (src) => { return binary_base64(src);                         }],
-        ["uint8"    , (src) => { return binary_uint8(src);                          }],
-        ["uint16"   , (src) => { return as_uint16(binary_uint8(src));               }],
+    [bstr]: m([
+        [utf8   , (src) => { return binary_utf8(src);                 }],
+        [utf16  , (src) => { return codes_str(r(bstr, u16, src));     }],
+        [b64    , (src) => { return binary_base64(src);               }],
+        [u8     , (src) => { return binary_uint8(src);                }],
+        [u16    , (src) => { return as_uint16(binary_uint8(src));     }],
     ]),
-    ["utf8"]: m([
-        ["base64"   , (src) => { return binary_base64(utf8_binary(src));            }],
-        ["binary"   , (src) => { return utf8_binary(src);                           }],
-        ["uint8"    , (src) => { return use_enc("utf8", src);                       }],
+    [utf8]: m([
+        [b64    , (src) => { return binary_base64(utf8_binary(src));  }],
+        [bstr   , (src) => { return utf8_binary(src);                 }],
+        [u8     , (src) => { return use_enc('utf8', src);             }],
     ]),
-    ["utf16"]: m([
-        ["base64"   , (src) => { return r("uint16", "base64", utf16_uint16(src));   }],
-        ["uint8"    , (src) => { return r("uint16", "uint8" , utf16_uint16(src));   }],
-        ["binary"   , (src) => { return r("uint16", "binary", utf16_uint16(src));   }],
-        ["uint16"   , (src) => { return utf16_uint16(src);                          }],
+    [utf16]: m([
+        [b64    , (src) => { return r(u16, b64,  utf16_uint16(src));  }],
+        [u8     , (src) => { return r(u16, u8 ,  utf16_uint16(src));  }],
+        [bstr   , (src) => { return r(u16, bstr, utf16_uint16(src));  }],
+        [u16    , (src) => { return utf16_uint16(src);                }],
     ]),
-    ["base64"]: m([
-        ["binary"   , (src) => { return base64_binary(src);                         }],
-        ["utf8"     , (src) => { return binary_utf8(base64_binary(src));            }],
-        ["utf16"    , (src) => { return codes_str(r("base64", "uint16", src));      }],
-        ["uint8"    , (src) => { return binary_uint8(r("base64", "binary", src));   }],
-        ["uint16"   , (src) => { return as_uint16(r("base64", "uint8", src))        }],
+    [b64]: m([
+        [bstr   , (src) => { return base64_binary(src);               }],
+        [utf8   , (src) => { return binary_utf8(base64_binary(src));  }],
+        [utf16  , (src) => { return codes_str(r(b64, u16, src));      }],
+        [u8     , (src) => { return binary_uint8(r(b64, bstr, src));  }],
+        [u16    , (src) => { return as_uint16(r(b64, u8, src))        }],
     ]),
 };
 
