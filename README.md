@@ -52,35 +52,35 @@ import BString from "../src/js/index.mjs"
 const EXAMPLE0 = "a Ā 𐀀 文 🦄";
 
 //
-const _utf8bytes_ = BString.as(EXAMPLE0, "utf8_bytes");
+const _utf8b_ = BString.as(EXAMPLE0, "utf8_ui8");
 const _utf8_ = EXAMPLE0;
 const _base64_valid_ = "YSDEgCDwkICAIOaWhyDwn6aE";
 
 //
 console.log(_utf8_);
-console.log(_utf8bytes_);
-console.log(BString.as(_utf8bytes_, "bytes_utf8"));
+console.log(_utf8b_);
+console.log(BString.as(_utf8b_, "ui8_utf8"));
 
 //
 console.log(BString.as(_utf8_, "utf8_base64"));
-console.log(BString.as(_utf8bytes_, "bytes_base64"));
-console.log(BString.as(_utf8_, "utf8_raw"));
-console.log(BString.as(_utf8bytes_, "bytes_raw"));
+console.log(BString.as(_utf8b_, "ui8_base64"));
+console.log(BString.as(_utf8_, "utf8_bin"));
+console.log(BString.as(_utf8b_, "ui8_bin"));
 
 //
-const _utf16bytes_ = BString.as(EXAMPLE0, "utf16_bytes");
+const _utf16b_ = BString.as(EXAMPLE0, "utf16_ui8");
 const _utf16_ = EXAMPLE0;
 
 //
 console.log(_utf16_);
-console.log(_utf16bytes_);
-console.log(BString.as(_utf16bytes_, "bytes_utf16"));
+console.log(_utf16b_);
+console.log(BString.as(_utf16b_, "ui8_utf16"));
 
 //
 console.log(BString.as(_utf16_, "utf16_base64"));
-console.log(BString.as(_utf16bytes_, "bytes_base64"));
-console.log(BString.as(_utf16_, "utf16_raw"));
-console.log(BString.as(_utf16bytes_, "bytes_raw"));
+console.log(BString.as(_utf16b_, "ui8_base64"));
+console.log(BString.as(_utf16_, "utf16_bin"));
+console.log(BString.as(_utf16b_, "ui8_bin"));
 ```
 
 ### Part II - C++ and STD
@@ -91,7 +91,7 @@ Planned...
 
 `char8_t` in C++ is means UTF-8 encoded character, whereas classic `char` is raw byte char. It's fundamental issue known also in JS.
 
-In JS under classic `char` means `utf8_raw` or `utf8_bytes` encoding, while under `char8_t` means `utf8` char.
+In JS under classic `char` means `utf8_bin` or `utf8_ui8` encoding, while under `char8_t` means `utf8` char.
 
 #### Windows UTF-8 locale (Beta)
 
