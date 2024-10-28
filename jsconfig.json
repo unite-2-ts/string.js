@@ -4,12 +4,6 @@
         "module": "esnext",
         "target": "esnext",
         "baseUrl": ".",
-        "paths": {
-            "/src/*": ["./src/*"],
-            "/deps/*": ["./deps/*"],
-            "/test/*": ["./test/*"],
-            "/@petamoriken/*": ["./node_modules/@petamoriken/*"],
-        }
     },
     "include": ["./src/**/*"]
 }
