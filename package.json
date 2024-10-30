@@ -16,8 +16,7 @@
   ],
   "author": "user-404",
   "license": "MIT",
-  "dependencies": {
-  },
   "devDependencies": {
+    "vite-plugin-external": "^4.3.1"
   }
 }
